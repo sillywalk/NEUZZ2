@@ -1,21 +1,23 @@
-import keras
-import pickle
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation
 import os
-import numpy as np
-import glob
-import random
-import math
-from keras.callbacks import ModelCheckpoint
-import time
-import keras.backend as K
-import tensorflow as tf
-from tensorflow import set_random_seed
-import subprocess
-from collections import Counter
-import socket
 import sys
+import glob
+import math
+import time
+import pickle
+import socket
+import random
+import subprocess
+import numpy as np
+from collections import Counter
+
+import keras
+import tensorflow as tf
+import keras.backend as K
+from keras.models import Sequential
+from tensorflow import set_random_seed
+from keras.callbacks import ModelCheckpoint
+from keras.layers import Dense, Dropout, Activation
+
 
 HOST='127.0.0.1'
 PORT=12012
@@ -285,7 +287,6 @@ def gen_adv3(f,fl,model,layer_list,idxx,splice):
 
     return adv_list
 
-
 # grenerate gradient information to guide furture muatation
 def gen_mutate2(model, edge_num, sign):
     tmp_list = []
@@ -381,11 +382,16 @@ def gen_grad(data):
     print(time.time()-t0)
 
 def setup_server():
+    """
+    Establish Socket connection with the C program
+    """
+    # Initialize the socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind((HOST, PORT))
     sock.listen(1)
     conn, addr = sock.accept()
-    print('connected by neuzz execution moduel'+str(addr))
+    print('connected by neuzz execution moduel' + str(addr))
+    
     gen_grad('train')
     conn.sendall("start")
     while True:
@@ -396,4 +402,5 @@ def setup_server():
             conn.sendall("start")
     conn.close()
 
-setup_server()
+if __name__ == "__main__":
+    setup_server()
