@@ -1,4 +1,4 @@
-# NEUZZ++: Deeper Nuezz
+# NEUZZ2: Deeper Nuezz
 
 ## Prerequisite
 Tested on a machine with Nvidia 1080Ti, Ubuntu 16.04/18.04, Tensorflow 1.8.0 and Keras 2.2.3.<br/>
