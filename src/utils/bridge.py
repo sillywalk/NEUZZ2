@@ -24,10 +24,16 @@ class CBridge:
         self.verbose = verbose
         
 
-    def setup_server(self) -> None:
+    def __enter__(self) -> None:
         """
-        Initialize a communication with sockets
+        Upon entry, initialize a communication with sockets, start accepting the communication.
+
+        Returns
+        -------
+        self.conn: socket 
+            A new socket object usable to send and receive data on this connection.
         """
+
         # Initialize the socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # Bind host to port
@@ -35,12 +41,16 @@ class CBridge:
         # Start listening with a maximum of 1 queued connection
         sock.listen(backlog=1)
         # Begin communication
-        conn, addr = sock.accept()
+        self.conn, self.addr = sock.accept()
         
         if self.verbose:
             log.info("Established connection to NEUZZ execution module at {}".format(str(addr)))
         
-        
-
-
+        return self.conn
+    
+    def __exit__(self, excp_type, excp_val, excp_tb):
+        """
+        Upon exit, close the socket connection.
+        """
+        self.conn.close()
 

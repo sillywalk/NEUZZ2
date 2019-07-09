@@ -110,7 +110,6 @@ def process_data():
         file_name = "./bitmaps/"+i.split('/')[-1]
         np.save(file_name,fit_bitmap[idx])
 
-
 # training data generator
 def generate_training_data(lb,ub):
     seed = np.zeros((ub-lb,MAX_FILE_SIZE))
@@ -254,7 +253,6 @@ def gen_adv2(f,fl,model,layer_list,idxx,splice):
                 adv_list.append((idx,val,'./splice_seeds/tmp_'+str(idxx+500)))
 
     return adv_list
-
 
 # compute gradient for given input without sign
 def gen_adv3(f,fl,model,layer_list,idxx,splice):
