@@ -10,15 +10,17 @@ prev = cur.parent
 if not cur in sys.path:
     sys.path.append(str(cur))
 
+from copy import copy, deepcopy
 from utils.parse_config import Config
 from utils.bridge import CBridge
 
 if __name__ == "__main__":
+    # -------------------------
     # Initialize configurations
     # -------------------------
     config = Config(prev.joinpath("conf", "neuzz.yml"))
     config = config.load_config()
-
+    # ------------------------------------------------
     # Create a comm bridge to interact with the C code
     # ------------------------------------------------
     with CBridge(config.socket.HOST, config.socket.PORT, verbose=True) as conn:
