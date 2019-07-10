@@ -4,7 +4,7 @@ from pathlib import Path
 
 cur = Path.cwd()
 while cur.name != "src":
-    cur = root.parent
+    cur = cur.parent
 
 prev = cur.parent
 if not cur in sys.path:
@@ -13,18 +13,20 @@ if not cur in sys.path:
 from copy import copy, deepcopy
 from utils.parse_config import Config
 from utils.bridge import CBridge
+from gradients import Gradient
 
 if __name__ == "__main__":
     # -------------------------
     # Initialize configurations
     # -------------------------
-    config = Config(prev.joinpath("conf", "neuzz.yml"))
-    config = config.load_config()
+    usr_config = Config(prev.joinpath("conf", "neuzz.yml"))
+    usr_config = usr_config.load_config()
     # ------------------------------------------------
     # Create a comm bridge to interact with the C code
     # ------------------------------------------------
     with CBridge(config.socket.HOST, config.socket.PORT, verbose=True) as conn:
         # Generate Gradients
+        grad = Gradient(usr_config)
         gen_gradients('train')
         # Ask the C code to take over and generate inputs for fuzzing
         conn.sendall("start")

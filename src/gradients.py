@@ -1,30 +1,60 @@
 import os
 import sys
 import math
-import time
 import keras
 import pickle
 import random
 import numpy as np
+from time import time
+from copy import copy
+
+cur = Path.cwd()
+while cur.name != "src":
+    cur = cur.parent
+
+if not cur in sys.path:
+    sys.path.append(str(cur))
+
+from utils.parse_config import Config
 import tensorflow as tf
 import keras.backend as K
 from keras.models import Sequential
-from copy import copy as shallowcopy
 from tensorflow import set_random_seed
 from keras.callbacks import ModelCheckpoint
 from keras.layers import Dense, Dropout, Activation
 
 class Gradient:
-    def __init__(self, config):
-        self.config = shallowcopy(config)
+    def __init__(self, config: Config, verbose: Bool=False) -> None:
+        """
+        The primary container with all the components to perform a gradient guided mutation.
+
+        Parameters
+        ----------
+        config: Config
+            A shared configurations container.
+        verbose: Bool
+            Turns on/off verbose mode.
+        """
+        # Initialize variables
+        self.usr_config: Config = copy(config)
+        self.round_count: int = 0
+        self.timer: int = 0
+
+        # Add some target specific config.
         self._init_additional_config()
     
-    def _init_additional_config(self):
+    def _init_additional_config(self) -> None:
         """
         Initialize additional parameters.
         """
-        self.config.gradient.MAX_FILE_SIZE = 0
-        self.config.gradient.MAX_BITMAP_SIZE = 0
+        self.aux_config = Config()
+        self.aux_config.set_config({ 
+                "gradient": {
+                    "MAX_FILE_SIZE": 0,
+                    "MAX_BITMAP_SIZE": 0,
+                    "SPLIT_RATIO": 0
+                    }
+                })
 
     def gen_adv2(self, f, fl, model, layer_list, idxx, splice):
         adv_list = []
@@ -67,7 +97,7 @@ class Gradient:
         return adv_list
 
     # compute gradient for given input without sign
-    def gen_adv3(f, fl, model, layer_list, idxx, splice):
+    def gen_adv3(sefl, f, fl, model, layer_list, idxx, splice):
         adv_list = []
         loss = layer_list[-2][1].output[:, f]
         grads = K.gradients(loss, model.input)[0]
@@ -100,9 +130,7 @@ class Gradient:
         return adv_list
 
     # grenerate gradient information to guide furture muatation
-
-
-    def gen_mutate2(model, edge_num, sign):
+    def gen_mutate2(self, model, edge_num, sign):
         tmp_list = []
         # select seeds
         print("#######debug" + str(round_cnt))
@@ -157,10 +185,16 @@ class Gradient:
                     f.write(",".join(ele0) + '|' +
                             ",".join(ele1) + '|' + ele2 + "\n")
 
+    def gen_grad(self, data: str) -> None:
+        """
+        The main interface of the gradient computation. Handles everything from preprocessing data, to building a NN model, to generating mutants.
 
-    def gen_grad(data):
-        global round_cnt
-        t0 = time.time()
+        Parameters
+        ----------
+        data: str
+            Operation mode. "train" -> use sign; "sloww" -> no sign.
+        """
+        self.timer = time()
         process_data()
         model = build_model()
         train(model)
@@ -169,5 +203,5 @@ class Gradient:
             gen_mutate2(model, 500, True)
         else:
             gen_mutate2(model, 500, False)
-        round_cnt = round_cnt + 1
-        print(time.time() - t0)
+        self.round_cnt += 1
+        print(time() - self.timer)
