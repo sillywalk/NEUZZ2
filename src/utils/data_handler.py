@@ -4,7 +4,7 @@ import glob
 import pickle
 
 class DataHandler:
-    def __init__(self, )
+    def __init__(self, config)
 
 # get vector representation of input
 def process_data():
