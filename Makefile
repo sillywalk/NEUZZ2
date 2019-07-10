@@ -1,5 +1,5 @@
 TEST_PATH=./
-PYTHON3_PATH=$HOME/miniconda/bin/python 
+PYTHON3_PATH=$(HOME)/miniconda/bin/python 
 
 all: test git
 
