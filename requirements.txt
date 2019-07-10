@@ -1,6 +1,9 @@
 nose
 numpy
 scipy
+pandas
 pyyaml
 pathlib
+sklearn
 tensorflow-gpu
+python-coveralls

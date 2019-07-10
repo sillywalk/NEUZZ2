@@ -1,5 +1,5 @@
 TEST_PATH=./
-PYTHON3_PATH=$(HOME)/miniconda/bin/python 
+PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
 all: test git
 
@@ -13,7 +13,8 @@ venv/bin/activate: requirements.txt
 test: venv
 	@echo "Running unit tests."
 	@echo ""
-	@- . venv/bin/activate; nosetests -s --with-coverage $(TEST_PATH); deactivate
+	@- . venv/bin/activate; nosetests -s --with-coverage ${TEST_PATH}; deactivate
+	@ rm -rf venv 
 	@echo ""
 
 clean:
