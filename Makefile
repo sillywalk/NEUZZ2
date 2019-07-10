@@ -7,14 +7,14 @@ venv: venv/bin/activate
 
 venv/bin/activate: requirements.txt
 	@- test -d venv || virtualenv -p ${PYTHON3_PATH} venv
-	@- . venv/bin/activate; pip install -Ur requirements.txt
+	# @- . venv/bin/activate; pip install -Ur requirements.txt
+	@- . venv/bin/activate; while read requirement; do conda install --yes ${requirement}; done < requirements.txt
 	@- touch venv/bin/activate
 
 test: venv
 	@echo "Running unit tests."
 	@echo ""
 	@- . venv/bin/activate; nosetests -s --with-coverage ${TEST_PATH}; deactivate
-	@ rm -rf venv 
 	@echo ""
 
 clean:
