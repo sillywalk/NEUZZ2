@@ -1,0 +1,6 @@
+nose
+numpy
+scipy
+pyyaml
+pathlib
+tensorflow-gpu
