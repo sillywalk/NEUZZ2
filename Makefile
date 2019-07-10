@@ -12,7 +12,7 @@ venv: environment.yml
 test: venv
 	@echo "Running unit tests."
 	@echo ""
-	@- . venv/bin/activate; nosetests -s --with-coverage ${TEST_PATH}; deactivate
+	@- conda activate $(pwd)/env; nosetests -s --with-coverage ${TEST_PATH}; deactivate
 	@echo ""
 
 clean:
