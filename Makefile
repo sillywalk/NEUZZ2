@@ -1,17 +1,19 @@
-SHELL=/bin/zsh
-ROOT_PATH=$(pwd)
-PYTHON3_PATH=${HOME}/miniconda3/bin/ 
+TEST_PATH=./
+PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
 all: test git
 
-venv: environment.yml
-	@- test -d venv || conda env create --prefix=$(ROOT_PATH)/venv -f environment.yml
-	@- conda activate $(ROOT_PATH)/venv; conda env update --prefix=$(ROOT_PATH)/venv --file environment.yml
+venv: venv/bin/activate
+
+venv/bin/activate: requirements.txt
+	@- test -d venv || virtualenv -p ${PYTHON3_PATH} venv
+	@- . venv/bin/activate; pip install -Ur requirements.txt
+	@- touch venv/bin/activate
 
 test: venv
 	@echo "Running unit tests."
 	@echo ""
-	@- conda activate $(ROOT_PATH)/venv; nosetests -s --with-coverage ${ROOT_PATH}; conda deactivate
+	@- . venv/bin/activate; nosetests -s --with-coverage ${TEST_PATH}; deactivate 
 	@echo ""
 
 clean:
