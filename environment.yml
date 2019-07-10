@@ -1,0 +1,15 @@
+name: 'nuezz2_venv'
+channels:
+  - defaults
+dependencies:
+  - pip 
+  - numpy
+  - scipy
+  - pandas
+  - pyyaml
+  - pathlib
+  - scikit-learn
+  - tensorflow-gpu
+  - pip:
+    - python-coveralls
+    - nose

@@ -3,13 +3,11 @@ PYTHON3_PATH=${HOME}/miniconda3/bin/python
 
 all: test git
 
-venv: venv/bin/activate
-
-venv/bin/activate: requirements.txt
-	@- test -d venv || virtualenv -p ${PYTHON3_PATH} venv
+venv: environment.yml
+	# @- test -d venv || virtualenv -p ${PYTHON3_PATH} venv
 	# @- . venv/bin/activate; pip install -Ur requirements.txt
-	@- . venv/bin/activate; while read requirement; do conda install --yes ${requirement}; done < requirements.txt
-	@- touch venv/bin/activate
+	@- test -d venv || conda env create --prefix=$(pwd)/venv -f environment.yml
+	@- conda activate $(pwd)/venv; conda env update --file environment.yml
 
 test: venv
 	@echo "Running unit tests."
