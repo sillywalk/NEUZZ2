@@ -1,3 +1,4 @@
+SHELL=/bin/zsh
 ROOT_PATH=$(pwd)
 PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
