@@ -1,4 +1,4 @@
-name: 'nuezz2_venv'
+name: venv
 channels:
   - defaults
 dependencies:
