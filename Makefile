@@ -1,4 +1,4 @@
-ROOT_PATH=./
+ROOT_PATH=$(pwd)
 PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
 all: test git
