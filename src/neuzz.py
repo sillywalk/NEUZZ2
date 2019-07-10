@@ -21,6 +21,12 @@ if __name__ == "__main__":
 
     # Create a comm bridge to interact with the C code
     # ------------------------------------------------
-    HOST = '127.0.0.1'
-    PORT = 12012
-    with CBridge(HOST, POST, verbose=True) as conn:
+    with CBridge(config.socket.HOST, config.socket.PORT, verbose=True) as conn:
+        # Generate Gradients
+        gen_gradients('train')
+        # Ask the C code to take over and generate inputs for fuzzing
+        conn.sendall("start")
+        data = conn.recv(config.socket.RECV_BUFF)
+        while data:
+            generate_gradients(data)
+            conn.sendall("start")

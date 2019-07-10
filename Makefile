@@ -1,7 +1,7 @@
 TEST_PATH=./
 PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
-all: test git
+all: git
 
 venv: venv/bin/activate
 
