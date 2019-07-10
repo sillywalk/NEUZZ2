@@ -1,16 +1,16 @@
-TEST_PATH=./
+ROOT_PATH=./
 PYTHON3_PATH=${HOME}/miniconda3/bin/python 
 
 all: test git
 
 venv: environment.yml
-	@- test -d venv || conda env create --prefix=$(pwd)/venv -f environment.yml
-	@- conda activate $(pwd)/venv; conda env update --prefix=$(pwd)/venv --file environment.yml
+	@- test -d venv || conda env create --prefix=$(ROOT_PATH)/venv -f environment.yml
+	@- conda activate $(ROOT_PATH)/venv; conda env update --prefix=$(ROOT_PATH)/venv --file environment.yml
 
 test: venv
 	@echo "Running unit tests."
 	@echo ""
-	@- conda activate $(pwd)/env; nosetests -s --with-coverage ${TEST_PATH}; deactivate
+	@- conda activate $(ROOT_PATH)/env; nosetests -s --with-coverage ${ROOT_PATH}; deactivate
 	@echo ""
 
 clean:
