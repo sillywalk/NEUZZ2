@@ -13,7 +13,7 @@ if not cur in sys.path:
 from copy import copy, deepcopy
 from utils.parse_config import Config
 from utils.bridge import CBridge
-from gradients import Gradient
+from core.gradients import Gradient
 
 if __name__ == "__main__":
     # -------------------------
@@ -25,12 +25,14 @@ if __name__ == "__main__":
     # Create a comm bridge to interact with the C code
     # ------------------------------------------------
     with CBridge(config.socket.HOST, config.socket.PORT, verbose=True) as conn:
+        # Get system args
+        arg_list = sys.argv[1:]
         # Generate Gradients
-        grad = Gradient(usr_config)
-        gen_gradients('train')
+        grad = Gradient(config=usr_config, argv=arg_list, verbose=True)
+        grad = grad.generate_gradients("train")
         # Ask the C code to take over and generate inputs for fuzzing
         conn.sendall("start")
         data = conn.recv(config.socket.RECV_BUFF)
         while data:
-            generate_gradients(data)
+            grad = grad.generate_gradients(data)
             conn.sendall("start")

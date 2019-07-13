@@ -1,3 +1,27 @@
+"""A container to hold all configurations.
+
+Config contains methods to read a yaml file and create an object to hold the configration. Once initialized, we can use the dot notation to access the configurations.
+
+E.g.,
+Let's say we have a yaml file called conf.yml
+
+foo:
+    bar: "bar"
+    baz:
+        baza: 1
+        bazb: False
+
+After reading this, we can use it as
+
+>>> conf = Config("conf.yml")
+>>> conf = conf.load_config()
+>>> print(conf.bar)
+bar
+>>> print(conf.baz.baza)
+1
+>>> print(conf.baz.bazb)
+False
+"""
 from __future__ import annotations
 import os
 import sys
@@ -12,6 +36,15 @@ while root.name != "src":
 
 if root not in sys.path:
     sys.path.append(str(root))
+
+__author__ = "Rahul Krishna and Dongdong She"
+__copyright__ = "Copyright 2019"
+__credits__ = ["Dongdong She"]
+__license__ = "GPL"
+__version__ = "1.0"
+__maintainer__ = "Rahul Krishna"
+__email__ = "i.m.ralk@gmail.com"
+__status__ = "Research Prototype"
 
 
 class Config:

@@ -5,6 +5,7 @@ import pathlib
 import logging
 log = logging.getLogger(__name__)
 
+
 class CBridge:
     def __init__(self, host: str, port: str, verbose: bool):
         """
@@ -22,7 +23,6 @@ class CBridge:
         self.host = host
         self.port = port
         self.verbose = verbose
-        
 
     def __enter__(self) -> None:
         """
@@ -42,15 +42,15 @@ class CBridge:
         sock.listen(backlog=1)
         # Begin communication
         self.conn, self.addr = sock.accept()
-        
+
         if self.verbose:
-            log.info("Established connection to NEUZZ execution module at {}".format(str(addr)))
-        
+            log.info(
+                "Established connection to NEUZZ execution module at {}".format(str(addr)))
+
         return self.conn
-    
+
     def __exit__(self, excp_type, excp_val, excp_tb):
         """
         Upon exit, close the socket connection.
         """
         self.conn.close()
-

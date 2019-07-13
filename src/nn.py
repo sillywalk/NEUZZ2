@@ -33,7 +33,7 @@ random.seed(seed)
 set_random_seed(seed)
 seed_list = glob.glob('./seeds/*')
 new_seeds = glob.glob('./seeds/id_*')
-SPLIT_RATIO = len(seed_list)
+NUM_SEEDS = len(seed_list)
 # get binary argv
 argvv = sys.argv[1:]
 
@@ -41,15 +41,15 @@ argvv = sys.argv[1:]
 def process_data():
     global MAX_BITMAP_SIZE
     global MAX_FILE_SIZE
-    global SPLIT_RATIO
+    global NUM_SEEDS
     global seed_list
     global new_seeds
 
     # shuffle training samples
     seed_list = glob.glob('./seeds/*')
     seed_list.sort()
-    SPLIT_RATIO = len(seed_list)
-    rand_index = np.arange(SPLIT_RATIO)
+    NUM_SEEDS = len(seed_list)
+    rand_index = np.arange(NUM_SEEDS)
     np.random.shuffle(seed_list)
     new_seeds = glob.glob('./seeds/id_*')
 
@@ -159,10 +159,10 @@ def train_generate(batch_size):
     while 1:
         np.random.shuffle(seed_list)
         # load a batch of training data
-        for i in range(0,SPLIT_RATIO,batch_size):
+        for i in range(0,NUM_SEEDS,batch_size):
             # load full batch
-            if (i+batch_size) > SPLIT_RATIO:
-                x,y=generate_training_data(i,SPLIT_RATIO)
+            if (i+batch_size) > NUM_SEEDS:
+                x,y=generate_training_data(i,NUM_SEEDS)
                 x = x.astype('float32')/255
             # load remaining data for last batch
             else:
@@ -359,7 +359,7 @@ def train(model):
     lrate = keras.callbacks.LearningRateScheduler(step_decay)
     callbacks_list = [loss_history, lrate]
     model.fit_generator(train_generate(16),
-              steps_per_epoch = (SPLIT_RATIO/16 + 1),
+              steps_per_epoch = (NUM_SEEDS/16 + 1),
               epochs=100,
               verbose=1, callbacks=callbacks_list)
     # Save model and weights

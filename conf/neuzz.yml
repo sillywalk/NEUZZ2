@@ -24,3 +24,14 @@ model:
       name: "output"
       activation: "sigmoid"
 
+# Configurations for running the fuzzer
+fuzz:
+  bitmap_len: 0    # The number of output branches to use to measure the 
+                   # coverage 0 means, use all branches.
+  labeling: "hard" # Labeling strategy. Use either "hard" or "soft"
+
+# System Options for limiting how the FUZZER is run
+sys:
+  gpu_mem_frac: 0.33  # Fraction of GPU memory assigned to a Tensorflow Job. 
+                      # Assuming a 12 GB GPU, we assign a max of 4GB for a task
+
