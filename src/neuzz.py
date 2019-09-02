@@ -7,7 +7,7 @@ while cur.name != "src":
     cur = cur.parent
 
 prev = cur.parent
-if not cur in sys.path:
+if not cur in sys.path: 
     sys.path.append(str(cur))
 
 from copy import copy, deepcopy
@@ -19,12 +19,12 @@ if __name__ == "__main__":
     # -------------------------
     # Initialize configurations
     # -------------------------
-    usr_config = Config(prev.joinpath("conf", "neuzz.yml"))
+    usr_config = Config(prev.joinpath("config", "neuzz.yml"))
     usr_config = usr_config.load_config()
     # ------------------------------------------------
     # Create a comm bridge to interact with the C code
     # ------------------------------------------------
-    with CBridge(config.socket.HOST, config.socket.PORT, verbose=True) as conn:
+    with CBridge(usr_config.socket.HOST, usr_config.socket.PORT, verbose=True) as conn:
         # Get system args
         arg_list = sys.argv[1:]
         # Generate Gradients
